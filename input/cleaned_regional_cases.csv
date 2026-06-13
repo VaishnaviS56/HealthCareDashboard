@@ -1,0 +1,9 @@
+region,date,new_cases,population,source,cases_per_100k
+East Town,2026-06-09,15.0,90000.0,Source B,16.67
+East Town,,0.0,90000.0,Source A,0.0
+North City,2026-06-10,45.0,150000.0,Source A,30.0
+North City,2026-06-10,44.0,150000.0,Source B,29.33
+Old Town,2026-06-10,8.0,54000.0,Source B,14.81
+South City,2026-06-09,0.0,120000.0,Source B,0.0
+South City,2026-06-10,30.0,120000.0,Source A,25.0
+West Village,,12.0,120000.0,Source A,10.0

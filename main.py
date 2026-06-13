@@ -17,31 +17,22 @@ DEFAULT_CSV_FILENAME = "clean_data.csv"
 DEFAULT_REPORT_FILENAME = "data_quality_report.json"
 
 
-def _load_input_dataset(input_dir: str) -> pd.DataFrame:
-    """Load all CSV files from the input directory."""
-    input_path = pathlib.Path(input_dir)
-    if not input_path.exists() or not input_path.is_dir():
-        raise FileNotFoundError(f"Input directory '{input_dir}' does not exist.")
+def _load_input_dataset(input_path: str) -> pd.DataFrame:
+    """Load only the explicitly provided CSV file."""
+    csv_file = pathlib.Path(input_path)
+    if not csv_file.exists() or not csv_file.is_file():
+        raise FileNotFoundError(f"CSV file '{input_path}' does not exist.")
+    if csv_file.suffix.lower() != ".csv":
+        raise ValueError(f"Input file '{input_path}' is not a CSV file.")
 
-    csv_files = sorted(input_path.glob("*.csv"))
-    if not csv_files:
-        raise FileNotFoundError(f"No CSV files found in '{input_dir}'.")
+    try:
+        df = pd.read_csv(csv_file)
+    except Exception as e:
+        raise ValueError(f"Failed to load CSV file '{input_path}': {e}") from e
 
-    frames = []
-    for csv_file in csv_files:
-        try:
-            df = pd.read_csv(csv_file)
-            df["source_file"] = csv_file.name
-            frames.append(df)
-            logging.info("Loaded CSV: %s", csv_file.name)
-        except Exception as e:
-            logging.warning("Failed to load %s: %s", csv_file.name, e)
-            continue
-
-    if not frames:
-        raise ValueError(f"No CSV files could be loaded from '{input_dir}'.")
-
-    return pd.concat(frames, ignore_index=True, sort=False)
+    df["source_file"] = csv_file.name
+    logging.info("Loaded CSV: %s", csv_file.name)
+    return df
 
 
 def prepare_clean_dataset(
@@ -50,9 +41,9 @@ def prepare_clean_dataset(
     outputs_dir: str,
     csv_filename: str = DEFAULT_CSV_FILENAME,
     report_filename: str = DEFAULT_REPORT_FILENAME,
-    input_dir: str = DEFAULT_INPUT_DIR,
+    input_path: str = DEFAULT_INPUT_DIR,
 ) -> dict[str, object]:
-    raw_data = _load_input_dataset(input_dir)
+    raw_data = _load_input_dataset(dataset_key)
     cleaned_data = clean_data(raw_data)
     report = assess_data_quality(cleaned_data)
 
@@ -86,5 +77,5 @@ def preprocess(dataset) -> dict[str, object]:
 
 
 if __name__ == "__main__":
-    preprocess("input/cleaned_regional_cases.csv")
+    preprocess("input/infant-mortality-rate.csv")
     # raise SystemExit(cli())
