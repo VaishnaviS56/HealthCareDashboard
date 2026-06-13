@@ -1,0 +1,91 @@
+{
+  "trend_analysis": {
+    "Cases_Reported": {
+      "direction": "Decreasing",
+      "slope": -154.2085,
+      "p_value": 0.0145
+    },
+    "Deaths": {
+      "direction": "Decreasing",
+      "slope": -4.5481,
+      "p_value": 0.0242
+    },
+    "Recovered": {
+      "direction": "Decreasing",
+      "slope": -138.906,
+      "p_value": 0.0176
+    },
+    "Vaccination_Coverage_Pct": {
+      "direction": "Increasing",
+      "slope": 1.0458,
+      "p_value": 0.0
+    },
+    "Hospital_Beds_Per_1000": {
+      "direction": "Increasing",
+      "slope": 0.0359,
+      "p_value": 0.0
+    },
+    "Doctors_Per_1000": {
+      "direction": "Increasing",
+      "slope": 0.0164,
+      "p_value": 0.0
+    },
+    "Sanitation_Access_Pct": {
+      "direction": "Increasing",
+      "slope": 0.7985,
+      "p_value": 0.0
+    },
+    "Infant_Mortality_Rate": {
+      "direction": "Decreasing",
+      "slope": -0.4499,
+      "p_value": 0.0
+    },
+    "Maternal_Mortality_Rate": {
+      "direction": "Decreasing",
+      "slope": -1.2861,
+      "p_value": 0.0
+    }
+  },
+  "top_correlations": [
+    {
+      "col_a": "Cases_Reported",
+      "col_b": "Recovered",
+      "r": 1.0
+    },
+    {
+      "col_a": "Infant_Mortality_Rate",
+      "col_b": "Maternal_Mortality_Rate",
+      "r": 0.997
+    },
+    {
+      "col_a": "Hospital_Beds_Per_1000",
+      "col_b": "Sanitation_Access_Pct",
+      "r": 0.991
+    },
+    {
+      "col_a": "Doctors_Per_1000",
+      "col_b": "Sanitation_Access_Pct",
+      "r": 0.989
+    },
+    {
+      "col_a": "Hospital_Beds_Per_1000",
+      "col_b": "Doctors_Per_1000",
+      "r": 0.986
+    },
+    {
+      "col_a": "Doctors_Per_1000",
+      "col_b": "Maternal_Mortality_Rate",
+      "r": -0.981
+    },
+    {
+      "col_a": "Sanitation_Access_Pct",
+      "col_b": "Infant_Mortality_Rate",
+      "r": -0.981
+    },
+    {
+      "col_a": "Doctors_Per_1000",
+      "col_b": "Infant_Mortality_Rate",
+      "r": -0.979
+    }
+  ]
+}
