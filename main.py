@@ -1,58 +1,90 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import pathlib
-import sys
+
+import pandas as pd
 
 from data_quality import assess_data_quality, report_to_dict
-from data_retrieval import AVAILABLE_DATASETS, AVAILABLE_SOURCES, retrieve_selected_sources
 from data_processing import clean_data
 
-DEFAULT_OUTPUT_FILE = "output/clean_data.csv"
+DEFAULT_INPUT_DIR = "input"
+DEFAULT_PREPROCESSED_DIR = "preprocessed"
+DEFAULT_OUTPUTS_DIR = "outputs"
+DEFAULT_CSV_FILENAME = "clean_data.csv"
+DEFAULT_REPORT_FILENAME = "data_quality_report.json"
 
 
-def prepare_clean_dataset(dataset_key: str, output_path: str, sources: list[str] | None = None) -> dict[str, object]:
-    if sources is None:
-        sources = AVAILABLE_SOURCES
+def _load_input_dataset(input_dir: str) -> pd.DataFrame:
+    """Load all CSV files from the input directory."""
+    input_path = pathlib.Path(input_dir)
+    if not input_path.exists() or not input_path.is_dir():
+        raise FileNotFoundError(f"Input directory '{input_dir}' does not exist.")
 
-    raw_data = retrieve_selected_sources(dataset_key, sources)
+    csv_files = sorted(input_path.glob("*.csv"))
+    if not csv_files:
+        raise FileNotFoundError(f"No CSV files found in '{input_dir}'.")
+
+    frames = []
+    for csv_file in csv_files:
+        try:
+            df = pd.read_csv(csv_file)
+            df["source_file"] = csv_file.name
+            frames.append(df)
+            logging.info("Loaded CSV: %s", csv_file.name)
+        except Exception as e:
+            logging.warning("Failed to load %s: %s", csv_file.name, e)
+            continue
+
+    if not frames:
+        raise ValueError(f"No CSV files could be loaded from '{input_dir}'.")
+
+    return pd.concat(frames, ignore_index=True, sort=False)
+
+
+def prepare_clean_dataset(
+    dataset_key: str,
+    preprocessed_dir: str,
+    outputs_dir: str,
+    csv_filename: str = DEFAULT_CSV_FILENAME,
+    report_filename: str = DEFAULT_REPORT_FILENAME,
+    input_dir: str = DEFAULT_INPUT_DIR,
+) -> dict[str, object]:
+    raw_data = _load_input_dataset(input_dir)
     cleaned_data = clean_data(raw_data)
     report = assess_data_quality(cleaned_data)
 
-    output_file = pathlib.Path(output_path)
-    output_file.parent.mkdir(parents=True, exist_ok=True)
-    cleaned_data.to_csv(output_file, index=False)
+    preprocessed_path = pathlib.Path(preprocessed_dir)
+    preprocessed_path.mkdir(parents=True, exist_ok=True)
+
+    csv_file = preprocessed_path / csv_filename
+    cleaned_data.to_csv(csv_file, index=False)
+
+    outputs_path = pathlib.Path(outputs_dir)
+    outputs_path.mkdir(parents=True, exist_ok=True)
+
+    report_file = outputs_path / report_filename
+    report_file.write_text(json.dumps(report_to_dict(report), indent=2), encoding="utf-8")
 
     return report_to_dict(report)
 
-
-def parse_arguments() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build a clean public health dataset CSV from selected sources.")
-    parser.add_argument("dataset", choices=AVAILABLE_DATASETS, help="Select the dataset to process.")
-    parser.add_argument("--output", default=DEFAULT_OUTPUT_FILE, help="Destination path for the cleaned CSV file.")
-    parser.add_argument(
-        "--sources",
-        nargs="+",
-        default=AVAILABLE_SOURCES,
-        help=f"Data sources to include. Available: {', '.join(AVAILABLE_SOURCES)}.",
-    )
-    return parser.parse_args()
-
-
-def main() -> int:
+def preprocess(dataset) -> dict[str, object]:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
-    args = parse_arguments()
 
-    try:
-        report = prepare_clean_dataset(args.dataset, args.output, args.sources)
-        logging.info("Clean CSV saved to %s", args.output)
-        logging.info("Data quality report: %s", report)
-        return 0
-    except Exception as exc:
-        logging.error("Failed to prepare dataset: %s", exc)
-        return 1
+    report = prepare_clean_dataset(
+        dataset,
+        "preprocessed",
+        "outputs",
+        "preprocessed_data.csv",
+        "report.json",
+        "input",
+    )
+    logging.info("Data quality summary: %s rows processed", report.get("row_count"))
+    return report
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    preprocess("input/cleaned_regional_cases.csv")
+    # raise SystemExit(cli())
