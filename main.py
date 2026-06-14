@@ -45,7 +45,7 @@ def prepare_clean_dataset(
 ) -> dict[str, object]:
     raw_data = _load_input_dataset(dataset_key)
     cleaned_data = clean_data(raw_data)
-    report = assess_data_quality(cleaned_data)
+    report = assess_data_quality(raw_data)
 
     preprocessed_path = pathlib.Path(preprocessed_dir)
     preprocessed_path.mkdir(parents=True, exist_ok=True)
@@ -69,7 +69,7 @@ def preprocess(dataset) -> dict[str, object]:
         "preprocessed",
         "outputs",
         "preprocessed_data.csv",
-        "report.json",
+        "quality_report.json",
         "input",
     )
     logging.info("Data quality summary: %s rows processed", report.get("row_count"))

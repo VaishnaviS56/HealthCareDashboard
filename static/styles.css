@@ -1,0 +1,374 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background:
+        linear-gradient(
+            135deg,
+            #eef4ff,
+            #f9fbff
+        );
+
+    font-family:
+        Inter,
+        Segoe UI,
+        sans-serif;
+
+    color: #1f2937;
+}
+
+/* ---------- NAVBAR ---------- */
+
+header {
+
+    margin: 30px;
+
+    padding: 35px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #4f46e5
+        );
+
+    color: white;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    box-shadow:
+        0 15px 40px rgba(37,99,235,.3);
+}
+header h1 {
+    color: white;
+    font-size: 34px;
+}
+
+.subtitle {
+    color: rgba(255,255,255,.8);
+}
+
+
+.back-btn {
+
+    background: white;
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    font-weight: 600;
+}
+
+.back-btn:hover {
+
+    background: #1d4ed8;
+}
+
+/* ---------- LANDING PAGE ---------- */
+
+.landing-container {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+}
+
+.hero-card {
+
+    width: 750px;
+
+    background: white;
+
+    padding: 50px;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.08);
+
+    text-align: center;
+}
+
+.hero-card h1 {
+
+    font-size: 36px;
+
+    margin-bottom: 20px;
+}
+
+.hero-card p {
+
+    font-size: 18px;
+
+    color: #6b7280;
+
+    line-height: 1.7;
+
+    margin-bottom: 30px;
+}
+
+.dataset-select {
+
+    width: 100%;
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid #d1d5db;
+
+    margin-bottom: 20px;
+
+    font-size: 16px;
+}
+
+button {
+
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+button:hover {
+
+    background: #1d4ed8;
+}
+
+/* ---------- DASHBOARD ---------- */
+
+.dashboard {
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding-bottom: 40px;
+}
+
+/* ---------- CARDS ---------- */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 25px;
+
+    margin: 30px;
+}
+
+.stat-card {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.08);
+
+    border-left:
+        6px solid #2563eb;
+}
+
+.stat-card h3 {
+
+    color: #6b7280;
+
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+
+    font-size: 26px;
+
+    font-weight: 700;
+}
+
+.card {
+
+    background: white;
+
+    margin: 30px;
+
+    padding: 35px;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.08);
+
+    transition: .2s;
+}
+
+.card:hover {
+
+    transform:
+        translateY(-3px);
+}
+
+.card h2 {
+
+    margin-bottom: 25px;
+
+    font-size: 26px;
+
+    color: #1e3a8a;
+
+    border-bottom:
+        3px solid #dbeafe;
+
+    padding-bottom: 10px;
+}
+
+/* ---------- MARKDOWN ---------- */
+
+.markdown-content {
+
+    line-height: 1.8;
+
+    font-size: 16px;
+}
+
+.markdown-content h1 {
+
+    margin-bottom: 15px;
+}
+
+.markdown-content h2 {
+
+    margin-top: 25px;
+
+    margin-bottom: 12px;
+}
+
+.markdown-content ul {
+
+    margin-left: 30px;
+}
+
+.markdown-content li {
+
+    margin-bottom: 8px;
+}
+
+.markdown-content table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 15px;
+}
+
+.markdown-content th {
+
+    background: #eef2ff;
+}
+
+.markdown-content th,
+.markdown-content td {
+
+    border: 1px solid #e5e7eb;
+
+    padding: 12px;
+}
+
+/* ---------- VISUALIZATIONS ---------- */
+
+.image-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(650px,1fr));
+
+    gap: 30px;
+}
+
+.image-card {
+
+    background: white;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.08);
+
+    transition: .25s;
+}
+
+.image-card:hover {
+
+    transform:
+        translateY(-6px)
+        scale(1.01);
+}
+
+
+.image-card img {
+
+    width: 100%;
+
+    display: block;
+}
+
+.markdown-content {
+
+    border-left:
+        5px solid #60a5fa;
+
+    padding-left: 20px;
+
+    line-height: 1.8;
+}
+
+button:disabled {
+
+    background: #94a3b8;
+
+    cursor: not-allowed;
+
+    opacity: 0.8;
+}

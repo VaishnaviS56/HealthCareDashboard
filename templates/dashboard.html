@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ dataset_name }}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='styles.css') }}">
+          <link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <header>
+
+        <div>
+            <h1>📊 {{ dataset_name }}</h1>
+            <p class="subtitle">
+                Government Data Analytics Dashboard
+            </p>
+        </div>
+
+        <a href="/" class="back-btn">
+            Choose Another Dataset
+        </a>
+
+    </header>
+
+
+    <section class="card">
+
+        <h2>Data Quality Analysis</h2>
+
+        <div class="markdown-content">
+            {{ quality_analysis|safe }}
+        </div>
+
+    </section>
+
+    <section class="card">
+
+        <h2>Trend & Correlation Analysis</h2>
+
+        <div class="markdown-content">
+            {{ trend_analysis|safe }}
+        </div>
+
+    </section>
+
+    <section class="card">
+
+        <h2>Generated Visualizations</h2>
+
+        <div class="image-grid">
+
+            {% for image in images %}
+
+            <div class="image-card">
+
+                <img
+                    src="/outputs/{{ image }}"
+                    alt="{{ image }}"
+                >
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+
+</html>

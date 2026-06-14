@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HealthCare Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+</head>
+<body>
+
+<div class="landing-container">
+
+    <div class="hero-card">
+
+        <h1>HealthCare Dashboard</h1>
+
+        <p>
+            Select a government dataset and generate
+            visualizations, quality reports, trend analysis,
+            and correlation insights.
+        </p>
+
+        <form action="/analyze" method="POST" onsubmit="showLoading()">
+
+            <select name="dataset" class="dataset-select">
+
+                {% for dataset in datasets %}
+                    <option value="{{ dataset }}">
+                        {{ dataset }}
+                    </option>
+                {% endfor %}
+
+            </select>
+
+            <button type="submit" id="analyze-btn" >
+                Analyze Dataset
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+function showLoading() {
+
+    const button = document.getElementById("analyze-btn");
+
+    button.disabled = true;
+
+    button.innerText = "Analyzing Dataset...";
+
+}
+</script>
+
+</body>
+</html>
