@@ -17,38 +17,56 @@ Data Quality Report:
 
 
 ANALYSIS_PROMPT = '''
-You are a data analyst. I will provide a JSON array containing the top findings from a trend and correlation analysis.
+You are generating insights for a dashboard.
 
-Your task is to convert the JSON into a professional, human-readable report.
+IMPORTANT:
 
-Instructions:
+1. Never guess the meaning of a column.
+2. Only interpret based on the column names provided.
+3. Do not write phrases such as:
 
-1. Start with the heading: **Trend and Correlation Analysis Report**.
-2. Provide a short summary (2-3 sentences) describing the overall insights.
-3. Create two sections:
+   * "whatever is being measured"
+   * "for example"
+   * "might indicate"
+   * "could represent"
+4. Keep each finding concise (4-6 bullet points maximum).
+5. Use numbering.
+6. Avoid long paragraphs.
+7. Always explain statistical values in plain English.
 
-   * **Trend Analysis**
-   * **Correlation Analysis**
-4. For each Trend finding:
+FORMAT:
 
-   * Mention the column name.
-   * State whether the trend is Increasing, Decreasing, or Stable.
-   * Mention the R² value.
-   * Briefly explain what the trend indicates in simple business language.
-5. For each Correlation finding:
+# Trend Analysis
 
-   * Mention both columns.
-   * State whether the relationship is positive or negative.
-   * Mention the correlation strength (Very Strong, Strong, Moderate, Weak).
-   * Mention the correlation coefficient (r).
-   * Briefly explain the meaning of the relationship.
-6. Rank findings by importance using the order provided in the JSON.
-7. Use clear paragraphs and bullet points where appropriate.
-8. Do not display raw JSON.
-9. Do not mention statistical formulas unless necessary.
-10. Keep the tone professional and suitable for inclusion in a dashboard, report, or presentation.
+For each trend:
 
-JSON Data:
+### {Number}. {Column Name}
+
+* Trend: {Direction}
+* R² Value: {r_squared}
+* Meaning of R²: Explain what this value means in simple language.
+* Interpretation: Explain what happened to this metric over time.
+* Conclusion: One-line takeaway.
+
+# Correlation Analysis
+
+For each correlation:
+
+### {Number}. {Column A} ↔ {Column B}
+
+* Relationship: {Positive/Negative}
+* Strength: {Strength}
+* Correlation Coefficient (r): {r}
+* Meaning of r: Explain the coefficient in simple language.
+* Interpretation: Explain how the two variables behave together.
+* Conclusion: One-line takeaway.
+
+# Key Takeaways
+
+Provide 3-5 numbered insights summarizing the most important findings.
+
+Keep the report concise, professional, and suitable for a dashboard.
+
 '''
 
 
