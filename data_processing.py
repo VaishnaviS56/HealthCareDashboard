@@ -32,15 +32,33 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _fill_missing_values(df: pd.DataFrame) -> pd.DataFrame:
-    """Fill missing values based on column type."""
+    """Fill missing values and handle invalid dates based on column type."""
+
     for column in df.columns:
-        if df[column].dtype in ["float64", "int64"]:
-            # For numeric: use median
+
+        # Detect datetime columns or columns with 'date' in the name
+        if "date" in column.lower() or pd.api.types.is_datetime64_any_dtype(df[column]):
+
+            # Convert invalid dates to NaT
+            df[column] = pd.to_datetime(df[column], errors="coerce")
+
+            # Fill missing/invalid dates with the most frequent valid date
+            if df[column].notna().any():
+                most_common_date = df[column].mode()[0]
+                df[column] = df[column].fillna(most_common_date)
+            else:
+                # If all dates are invalid, use a default placeholder
+                df[column] = df[column].fillna(pd.Timestamp("1970-01-01"))
+
+        # Numeric columns
+        elif pd.api.types.is_numeric_dtype(df[column]):
             median = df[column].median(skipna=True)
             df[column] = df[column].fillna(median if pd.notna(median) else 0)
+
+        # Categorical/Text columns
         else:
-            # For non-numeric: use "Unknown"
             df[column] = df[column].fillna("Unknown")
+
     return df
 
 
