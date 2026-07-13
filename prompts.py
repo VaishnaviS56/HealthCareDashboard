@@ -120,9 +120,6 @@ Scatter Plot:
 - x column must be numerical
 - y column must be numerical
 
-Histogram:
-- column must be numerical
-
 Pie Chart:
 - column must be categorical
 - should contain relatively few categories
@@ -160,7 +157,6 @@ Additionally, columns whose unique_values are approximately equal to the total n
 Never use identifier fields:
 - as x-axis variables
 - as y-axis variables
-- as histogram inputs
 - as scatter plot variables
 - as bar chart values
 - as pie chart categories

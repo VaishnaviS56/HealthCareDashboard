@@ -37,7 +37,10 @@ def generate(dataset_name):
     shutil.rmtree(OUTPUT_FOLDER, ignore_errors=True)
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
+
     quality_report = preprocess(dataset_path)
+
+    dataset_path = os.path.join("preprocessed", "preprocessed_data.csv")
 
     analysis_report = analyze(dataset_path)
 

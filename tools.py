@@ -53,6 +53,7 @@ from textwrap import fill
 
 def wrap_label(text, width=25):
     return fill(str(text), width=width)
+
 @tool
 def plot_line_chart(x_col, y_col):
     """
@@ -226,7 +227,7 @@ def plot_bar_chart(category_col, value_col):
             f"Bar chart value column must be numeric. {value_col} is {df[value_col].dtype}"
         )
 
-    if df[category_col].nunique() > 30:
+    if df[category_col].nunique() > 50:
         return validation_error(
             f"{category_col} has too many categories for a useful bar chart."
         )
@@ -275,79 +276,6 @@ def plot_bar_chart(category_col, value_col):
         "image_path": output_path,
         "chart_type": "bar",
         "columns": [category_col, value_col]
-    }
-
-@tool
-def plot_histogram(column):
-    """
-    Create a histogram.
-
-    Use for:
-    - understanding distributions
-    - identifying spread of values
-    - identifying concentration of values
-    - detecting outliers
-
-    Input:
-    - numerical column
-
-    Good examples:
-    - vaccination_rate
-    - literacy_rate
-    - infant_mortality_rate
-    - life_expectancy
-
-    Prefer:
-    - rates
-    - percentages
-    - measurements
-    - health indicators
-
-    Avoid:
-    - identifiers
-    - categorical columns
-    - variables whose distribution is unlikely to provide useful insight
-    """
-
-    if column not in df.columns:
-        return validation_error(f"{column} does not exist")
-
-    if not is_numeric(column):
-        return validation_error(
-            f"Histogram requires a numeric column. {column} is {df[column].dtype}"
-        )
-
-    output_path = create_chart_path()
-
-    plt.figure(figsize=(10, 6))
-
-    plt.hist(
-        df[column],
-        bins=20
-    )
-
-    plt.xlabel(
-        wrap_label(column)
-    )
-
-    plt.ylabel("Frequency")
-
-    plt.title(
-        wrap_label(
-            f"Distribution of {column}",
-            width=40
-        )
-    )
-
-    plt.tight_layout(pad=2)
-
-    plt.savefig(output_path)
-    plt.close()
-
-    return {
-        "image_path": output_path,
-        "chart_type": "histogram",
-        "columns": [column]
     }
 
 @tool

@@ -1,7 +1,7 @@
 import pandas as pd
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from tools import plot_bar_chart, plot_histogram, plot_line_chart, plot_pie_chart, plot_scatter_chart, init_df_for_tools
+from tools import plot_bar_chart, plot_line_chart, plot_pie_chart, plot_scatter_chart, init_df_for_tools
 from llm_factory import create_llm
 from pathlib import Path
 from prompts import VISUALIZER_PROMPT
@@ -57,7 +57,6 @@ llm_with_tools = llm.bind_tools(
         plot_line_chart,
         plot_scatter_chart,
         plot_bar_chart,
-        plot_histogram,
         plot_pie_chart
     ]
 )
@@ -83,8 +82,6 @@ def visualize(file_path):
         )
 
 
-    # print(metadata)
-
     response = chain.invoke({
             "dataset_name": Path(file_path).name,
             "row_count": len(df),
@@ -92,15 +89,11 @@ def visualize(file_path):
             "metadata": metadata
         })
 
-    # print(response.content)
-    # print(response.tool_calls)
-
 
     tool_map = {
         "plot_line_chart": plot_line_chart,
         "plot_scatter_chart": plot_scatter_chart,
         "plot_bar_chart": plot_bar_chart,
-        "plot_histogram": plot_histogram,
         "plot_pie_chart": plot_pie_chart
     }
 
