@@ -29,6 +29,38 @@ llm = create_llm()
 INPUT_FOLDER = "input"
 OUTPUT_FOLDER = "outputs"
 
+@app.route("/") 
+def index():
+
+    datasets = sorted(
+        [
+            file
+            for file in os.listdir(INPUT_FOLDER)
+            if file.endswith(".csv")
+        ]
+    )
+
+    return render_template(
+        "index.html",
+        datasets=datasets
+    )
+
+
+@app.route("/analyze", methods=["POST"])
+def analyze_dataset():
+
+    dataset_name = request.form.get("dataset")
+
+    result = generate(dataset_name)
+
+    return render_template(
+        "dashboard.html",
+        dataset_name=dataset_name,
+        quality_analysis=result["quality_analysis"],
+        trend_analysis=result["trend_analysis"],
+        images=result["images"]
+    )
+
 
 def generate(dataset_name):
 
@@ -36,7 +68,6 @@ def generate(dataset_name):
 
     shutil.rmtree(OUTPUT_FOLDER, ignore_errors=True)
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-
 
     quality_report = preprocess(dataset_path)
 
@@ -77,39 +108,6 @@ def generate(dataset_name):
     }
 
 
-@app.route("/")
-def index():
-
-    datasets = sorted(
-        [
-            file
-            for file in os.listdir(INPUT_FOLDER)
-            if file.endswith(".csv")
-        ]
-    )
-
-    return render_template(
-        "index.html",
-        datasets=datasets
-    )
-
-
-@app.route("/analyze", methods=["POST"])
-def analyze_dataset():
-
-    dataset_name = request.form.get("dataset")
-
-    result = generate(dataset_name)
-
-    return render_template(
-        "dashboard.html",
-        dataset_name=dataset_name,
-        quality_analysis=result["quality_analysis"],
-        trend_analysis=result["trend_analysis"],
-        images=result["images"]
-    )
-
-
 @app.route("/outputs/<path:filename>")
 def serve_output_image(filename):
 
@@ -117,7 +115,6 @@ def serve_output_image(filename):
         OUTPUT_FOLDER,
         filename
     )
-
 
 if __name__ == "__main__":
 

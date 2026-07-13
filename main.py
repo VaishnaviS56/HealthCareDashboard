@@ -74,8 +74,3 @@ def preprocess(dataset) -> dict[str, object]:
     )
     logging.info("Data quality summary: %s rows processed", report.get("row_count"))
     return report
-
-
-if __name__ == "__main__":
-    preprocess("input/infant-mortality-rate.csv")
-    # raise SystemExit(cli())

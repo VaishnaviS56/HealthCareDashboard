@@ -80,6 +80,11 @@ def plot_line_chart(x_col, y_col):
     if y_col not in df.columns:
         return validation_error(f"{y_col} does not exist")
 
+    if x_col == y_col:
+        return validation_error(
+            "Line plot cannot use the same column for both axes."
+        )
+    
     if not is_numeric(y_col):
         return validation_error(
             f"Line chart requires numeric y column. {y_col} is {df[y_col].dtype}"
@@ -92,9 +97,38 @@ def plot_line_chart(x_col, y_col):
 
     output_path = create_chart_path()
 
+    plot_df = df[[x_col, y_col]].copy()
+
+    if is_temporal_or_ordered(x_col):
+
+        plot_df[x_col] = pd.to_datetime(
+            plot_df[x_col],
+            errors="coerce"
+        )
+
+        plot_df = plot_df.dropna(subset=[x_col])
+
+        if plot_df[x_col].duplicated().any():
+
+            plot_df = (
+                plot_df
+                .groupby(x_col, as_index=False)[y_col]
+                .mean()
+            )
+
+        plot_df = plot_df.sort_values(x_col)
+
     plt.figure(figsize=(12, 6))
 
-    plt.plot(df[x_col], df[y_col])
+    plt.plot(
+        plot_df[x_col],
+        plot_df[y_col],
+        marker="o"
+    )
+
+    # plt.figure(figsize=(12, 6))
+
+    # plt.plot(df[x_col], df[y_col])
 
     plt.xticks(rotation=45)
 
@@ -117,6 +151,7 @@ def plot_line_chart(x_col, y_col):
         "chart_type": "line",
         "columns": [x_col, y_col]
     }
+
 @tool
 def plot_scatter_chart(x_col, y_col):
     """
@@ -143,6 +178,11 @@ def plot_scatter_chart(x_col, y_col):
     if y_col not in df.columns:
         return validation_error(f"{y_col} does not exist")
 
+    if x_col == y_col:
+        return validation_error(
+            "Scatter plot cannot use the same column for both axes."
+        )
+    
     if not is_numeric(x_col):
         return validation_error(
             f"Scatter chart requires numeric x column. {x_col} is {df[x_col].dtype}"
@@ -227,7 +267,7 @@ def plot_bar_chart(category_col, value_col):
             f"Bar chart value column must be numeric. {value_col} is {df[value_col].dtype}"
         )
 
-    if df[category_col].nunique() > 50:
+    if df[category_col].nunique() > 60:
         return validation_error(
             f"{category_col} has too many categories for a useful bar chart."
         )
